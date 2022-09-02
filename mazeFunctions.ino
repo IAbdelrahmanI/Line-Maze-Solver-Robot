@@ -49,6 +49,8 @@ void mazeSolve(void)
         
          }
     }
+    status = 0;
+    pathIndex = 0;
 }
 
 //---------------------------------------------
@@ -62,10 +64,10 @@ void recIntersection(char direction)
 //----------------------------------------------
 void mazeEnd(void)
 {
-  motorStop();
+  Stop();
   for(int i=0;i<pathLength;i++)
   
-    //Serial.print(path[i]);
+    Serial.print(path[i]);
  
   Serial.print("  pathLenght ==> ");
   Serial.println(pathLength);
@@ -169,6 +171,8 @@ void mazeOptimization (void)
         break;       
     }    
    }  
+   status = 0;
+   pathIndex = 0;
 }
 
 //-----------------------------------------------------
@@ -196,7 +200,6 @@ void mazeTurn (char dir)
 //-----------------------------------------------------
 void mazeReverse()
 {
-  char reversedPath[100] = "";
   for (int i = 0; i <= pathLength; i++)
   {
     reversedPath[i] = path[pathLength-i];
@@ -250,4 +253,6 @@ void mazeOptimizationReversed (void)
         break;       
     }    
    }  
+   status = 0;
+   pathIndex = 0;
 }

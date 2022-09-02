@@ -9,8 +9,14 @@ int mode = 0;
 # define T_INTERSECTION 7
 # define LEFT_T_INTERSECTION 8
 # define RIGHT_T_INTERSECTION 9
-# define BUTTON_F
-# define BUTTON_R
+# define BUTTON_F 10
+# define BUTTON_R 11
+# define IN1 13
+# define IN2 14
+# define IN3 15
+# define IN4 16
+# define ENA 17
+# define ENB 18
 
 bool forwardButton = 0;
 bool reverseButton = 0;
@@ -62,6 +68,7 @@ unsigned char dir;
 //  'B' for back (U-turn)
 
 char path[100] = "";
-unsigned int pathLenght = 0; // the length of the path
+char reversedPath[100] = "";
+unsigned int pathLength = 0; // the length of the path
 int pathIndex = 0;
 unsigned int status = 0; // solving = 0; reach end = 1

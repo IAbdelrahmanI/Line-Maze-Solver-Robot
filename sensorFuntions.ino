@@ -15,12 +15,6 @@ void readLFSsensors()
   else if (left == 0 && front == 1 && right == 1)  mode = RIGHT_T_INTERSECTION;
   else if (left == 1 && front == 1 && right == 0)  mode = LEFT_T_INTERSECTION;
   
-  Serial.print (farLeftSensor);
-  Serial.print (" <== LEFT  RIGH==> ");
-  Serial.print (farRightSensor);
-  Serial.print ("  mode: ");
-  Serial.print (mode);
-  Serial.print ("  error:");
-  Serial.println (error);
+
     
 }

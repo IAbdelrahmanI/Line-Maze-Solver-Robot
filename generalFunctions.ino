@@ -21,7 +21,7 @@ void calculatePID()
 }
 
 //--------------------------------------------------------
-void checkPIDvalues()
+/*void checkPIDvalues()
 {
   
   BT1.print("PID: ");
@@ -38,10 +38,10 @@ void checkPIDvalues()
   Serial.print(" - ");
   Serial.println(Kd);  
   
-}
+}*/
 
 //-----------------------------------------------
-void testLineFollowSensors()
+/*void testLineFollowSensors()
 {
      int LFS0 = digitalRead(lineFollowSensor0);
      int LFS1 = digitalRead(lineFollowSensor1);
@@ -69,4 +69,4 @@ void testLineFollowSensors()
      Serial.print (D);
      Serial.print (" PID: ");
      Serial.println (PIDvalue);
-}
+}*/

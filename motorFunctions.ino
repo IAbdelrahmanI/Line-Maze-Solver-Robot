@@ -31,7 +31,7 @@ void Reverse()
   delay(500); //We will test the delay for 180 degree turn
 }
 //------------------------------------------------
-void RunExtraInch(void)
+void runExtraInch(void)
 {
   Forward();
   delay(extraInch);

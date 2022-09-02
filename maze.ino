@@ -19,8 +19,15 @@ void setup()
 
   pinMode(BUTTON_F, INPUT_PULLUP);
   pinMode(BUTTON_R, INPUT_PULLUP);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
   
-  checkPIDvalues();
+//  checkPIDvalues();
   mode = STOPPED;
   status = 0; // 1st pass
 }
@@ -34,14 +41,14 @@ void loop()
   previousReverse= reverseButton;
   forwardButton = digitalRead(BUTTON_F);
   delay(25);
-  reverseButton = digitalRead(BUTTIN_R);
+  reverseButton = digitalRead(BUTTON_R);
   delay(25);
 
   
   if (forwardButton && !previousForward)
   solveState = !solveState;
   
-  if (solveState)
+  if (solveState && !mazeSolved)
   {mazeSolve();mazeSolved = 1;} // First pass to solve the maze
   ledBlink(2);
   Serial.println("End First Pass"); 
@@ -62,7 +69,5 @@ void loop()
   mazeOptimizationReversed();
   
   mode = STOPPED;
-  status = 0; // 1st pass
-  pathIndex = 0;
-  pathLength = 0;
+  //pathLength = 0; //reset the arduino for a new pathLength
 }
