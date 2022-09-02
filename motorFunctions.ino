@@ -1,83 +1,70 @@
 
-void motorStop()
+void Stop()
 {
-  leftServo.writeMicroseconds(1500);
-  rightServo.writeMicroseconds(1500);
-  delay(200);
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
 }
 
 //--------------------------------------------- 
-void motorForward()
+void Forward()
 {
-  leftServo.writeMicroseconds(1500 - (power+adj));
-  rightServo.writeMicroseconds(1500 + power);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  analogWrite(ENA, 100);
+  
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(ENB, 100);
 }
 
 //---------------------------------------------
-void motorBackward()
+void Reverse()
 {
-  leftServo.writeMicroseconds(1500 + power);
-  rightServo.writeMicroseconds(1500 - power);
-}
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  analogWrite(ENA, 100);
+  
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+  analogWrite(ENB, 100);
 
-//---------------------------------------------
-void motorFwTime (unsigned int time)
-{
-  motorForward();
-  delay (time);
-  motorStop();
+  delay(500); //We will test the delay for 180 degree turn
 }
-
-//---------------------------------------------
-void motorBwTime (unsigned int time)
-{
-  motorBackward();
-  delay (time);
-  motorStop();
-}
-
 //------------------------------------------------
-void motorTurn(int direction, int degrees)
+void RunExtraInch(void)
 {
-  leftServo.writeMicroseconds(1500 - (iniMotorPower+adj)*direction);
-  rightServo.writeMicroseconds(1500 - iniMotorPower*direction);
-  delay (round(adjTurn*degrees+20));
-  motorStop();
-}
-
-//---------------------------------------------------
-void motorPIDcontrol()
-{
-  
-  int leftMotorSpeed = 1500 - (iniMotorPower+adj) - PIDvalue;
-  int rightMotorSpeed = 1500 + iniMotorPower - PIDvalue;
-  
-  // The motor speed should not exceed the max PWM value
-   constrain(leftMotorSpeed, 1000, 2000);
-   constrain(rightMotorSpeed, 1000, 2000);
-  
-  leftServo.writeMicroseconds(leftMotorSpeed);
-  rightServo.writeMicroseconds(rightMotorSpeed);
-  
-  //Serial.print (PIDvalue);
-  //Serial.print (" ==> Left, Right:  ");
-  //Serial.print (leftMotorSpeed);
-  //Serial.print ("   ");
-  //Serial.println (rightMotorSpeed);
-}
-
-//---------------------------------------------------
-void runExtraInch(void)
-{
-  motorPIDcontrol();
+  Forward();
   delay(extraInch);
-  motorStop();
+  Stop();
 }
-
 //---------------------------------------------------
-void goAndTurn(int direction, int degrees)
+void GoRight()
 {
-  motorPIDcontrol();
-  delay(adjGoAndTurn);
-  motorTurn(direction, degrees);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  analogWrite(ENA, 100);
+  
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(ENB, 100);
+
+  delay(500); //We will test the delay for 90 degree turn
+
+  Forward();
 }
+//---------------------------------------------------
+void GoLeft()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  analogWrite(ENA, 100);
+  
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+  analogWrite(ENB, 100);
+
+  delay(500); //We will test the delay for 90 degree turn
+
+  Forward();
+}
+//---------------------------------------------------

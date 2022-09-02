@@ -6,32 +6,45 @@ void mazeSolve(void)
         switch (mode)
         {   
           case NO_LINE:  
-            motorStop();
-            goAndTurn (LEFT, 180);
+            Stop();
+            Reverse();
             recIntersection('B');
             break;
           
           case CONT_LINE: 
             runExtraInch();
             readLFSsensors();
-            if (mode != CONT_LINE) {goAndTurn (LEFT, 90); recIntersection('L');} // or it is a "T" or "Cross"). In both cases, goes to LEFT
-            else mazeEnd(); 
+            if (mode == FOLLOWING_LINE) {GoRight(); recIntersection('R');} 
+            else if (mode == NO_LINE || mode == CONT_LINE) mazeEnd(); 
             break;
             
          case RIGHT_TURN: 
-            runExtraInch();
-            readLFSsensors();
-            if (mode == NO_LINE) {goAndTurn (RIGHT, 90); recIntersection('R');}
-            else recIntersection('S');
+            GoRight();
+            recIntersection('R');
             break;   
             
          case LEFT_TURN: 
-            goAndTurn (LEFT, 90); 
+            GoLeft(); 
             recIntersection('L');
-            break;   
-         
+            break;
+   
+         case T_INTERSECTION:
+            GoRight();
+            recIntersection('R');
+            break;
+
+         case RIGHT_T_INTERSECTION:
+            GoRight();
+            recIntersection('R');
+            break;
+
+         case LEFT_T_INTERSECTION:
+            Forward();
+            recIntersection('S');
+            break;
+                  
          case FOLLOWING_LINE: 
-            followingLine();
+            Forward();
             break;      
         
          }
@@ -50,23 +63,15 @@ void recIntersection(char direction)
 void mazeEnd(void)
 {
   motorStop();
-  BT1.print("The End  ==> Path: ");
   for(int i=0;i<pathLength;i++)
-    BT1.print(path[i]);
+  
     //Serial.print(path[i]);
-  BT1.println("");
+ 
   Serial.print("  pathLenght ==> ");
   Serial.println(pathLength);
   status = 1;
   mode = STOPPED;
-}
-
-//----------------------------------------------
-void followingLine(void)
-{
-   //readLFSsensors(); 
-   calculatePID();
-   motorPIDcontrol();   
+  pathIndex = 0;
 }
 
 //------------------------------------------------------------------------------------------
@@ -132,7 +137,7 @@ void mazeOptimization (void)
     switch (mode)
     {
       case FOLLOWING_LINE:
-        followingLine();
+        Forward;
         break;    
       case CONT_LINE:
         if (pathIndex >= pathLength) mazeEnd (); 
@@ -145,7 +150,23 @@ void mazeOptimization (void)
       case RIGHT_TURN:
         if (pathIndex >= pathLength) mazeEnd (); 
         else {mazeTurn (path[pathIndex]); pathIndex++;}
-        break;   
+        break;
+      case T_INTERSECTION:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (path[pathIndex]); pathIndex++;}
+        break;  
+      case LEFT_T_INTERSECTION:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (path[pathIndex]); pathIndex++;}
+        break;  
+      case RIGHT_T_INTERSECTION:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (path[pathIndex]); pathIndex++;}
+        break;
+      case NO_LINE:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (path[pathIndex]); pathIndex++;}
+        break;       
     }    
    }  
 }
@@ -156,19 +177,77 @@ void mazeTurn (char dir)
   switch(dir)
   {
     case 'L': // Turn Left
-       goAndTurn (LEFT, 90);      
+       GoLeft;      
        break;   
     
     case 'R': // Turn Right
-       goAndTurn (RIGHT, 90);     
+       GoRight;     
        break;   
        
     case 'B': // Turn Back
-       goAndTurn (RIGHT, 800);     
+       Reverse;     
        break;   
        
     case 'S': // Go Straight
        runExtraInch(); 
        break;
   }
+}
+//-----------------------------------------------------
+void mazeReverse()
+{
+  char reversedPath[100] = "";
+  for (int i = 0; i <= pathLength; i++)
+  {
+    reversedPath[i] = path[pathLength-i];
+  }
+  for (int i = 0; i <= pathLength; i++)
+  {
+    if (reversedPath[i] == 'R')
+    reversedPath[i] = 'L';
+    else if (reversedPath[i] == 'L')
+    reversedPath[i] = 'R';
+  }
+}
+//-----------------------------------------------------
+void mazeOptimizationReversed (void)
+{
+  while (!status)
+  {
+    readLFSsensors();  
+    switch (mode)
+    {
+      case FOLLOWING_LINE:
+        Forward;
+        break;    
+      case CONT_LINE:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (reversedPath[pathIndex]); pathIndex++;}
+        break;  
+      case LEFT_TURN:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (reversedPath[pathIndex]); pathIndex++;}
+        break;  
+      case RIGHT_TURN:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (reversedPath[pathIndex]); pathIndex++;}
+        break;
+      case T_INTERSECTION:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (reversedPath[pathIndex]); pathIndex++;}
+        break;  
+      case LEFT_T_INTERSECTION:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (reversedPath[pathIndex]); pathIndex++;}
+        break;  
+      case RIGHT_T_INTERSECTION:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (reversedPath[pathIndex]); pathIndex++;}
+        break;
+      case NO_LINE:
+        if (pathIndex >= pathLength) mazeEnd (); 
+        else {mazeTurn (reversedPath[pathIndex]); pathIndex++;}
+        break;       
+    }    
+   }  
 }
