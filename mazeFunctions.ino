@@ -51,6 +51,7 @@ void mazeSolve(void)
     }
     status = 0;
     pathIndex = 0;
+    optimizing = 1;
 }
 
 //---------------------------------------------
@@ -173,6 +174,8 @@ void mazeOptimization (void)
    }  
    status = 0;
    pathIndex = 0;
+   allRunsDone++;
+   optimizing = 0;
 }
 
 //-----------------------------------------------------
@@ -255,4 +258,19 @@ void mazeOptimizationReversed (void)
    }  
    status = 0;
    pathIndex = 0;
+   allRunsDone++;
+   reverseFinished = 1;
 }
+//-----------------------------------------------------
+
+void setUpMazeSolver(void)
+{
+  pathLength = 0;
+  mazeSolved = 0;
+  allRunsDone = -1;
+  reverseState = 0;
+  optimizing = 0;
+  solveState = 0;
+  reverseFinished = 0;
+}
+//-----------------------------------------------------

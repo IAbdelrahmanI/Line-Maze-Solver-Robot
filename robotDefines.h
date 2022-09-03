@@ -25,6 +25,8 @@ bool previousReverse= reverseButton;
 bool solveState = 0;
 bool reverseState = 0;
 bool mazeSolved = 0;
+bool optimizing = 0;
+bool reverseFinished = 0;
 
 const int power = 250;
 const int iniMotorPower = 250;
@@ -71,4 +73,5 @@ char path[100] = "";
 char reversedPath[100] = "";
 unsigned int pathLength = 0; // the length of the path
 int pathIndex = 0;
-unsigned int status = 0; // solving = 0; reach end = 1
+bool status = 0; // solving = 0; reach end = 1
+short allRunsDone = -1;

@@ -49,25 +49,23 @@ void loop()
   solveState = !solveState;
   
   if (solveState && !mazeSolved)
-  {mazeSolve();mazeSolved = 1;} // First pass to solve the maze
-  ledBlink(2);
-  Serial.println("End First Pass"); 
+  {mazeSolve();mazeSolved = 1;ledBlink(2); Serial.println("End First Pass"); } // First pass to solve the maze
   
   
-  Serial.println("Starting 2nd Pass"); 
-  pathIndex = 0;
-  status = 0;
-  if (!solveState && mazeSolved)
-  mazeOptimization(); //run the maze as fast as possible
+  
+  
+  if (!solveState && mazeSolved && optimizing)
+  {Serial.println("Starting 2nd Pass"); mazeOptimization(); //run the maze as fast as possible
   ledBlink(3);
-  Serial.println("End 2nd Pass"); 
+  Serial.println("End 2nd Pass"); }
 
   if (reverseButton && !previousReverse)
   reverseState = !reverseState;
 
-  if (reverseState && mazeSolved)
+  if (reverseState && mazeSolved && !reverseFinished)
   mazeOptimizationReversed();
   
   mode = STOPPED;
-  //pathLength = 0; //reset the arduino for a new pathLength
+  if (allRunsDone == 1)
+  setUpMazeSolver();
 }
